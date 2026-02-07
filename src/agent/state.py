@@ -1,9 +1,9 @@
 from typing import TypedDict, Optional, List
 
 class CellInfo(TypedDict):
-    code:str,
-    output:Optional[str],
-    execution_count:int
+    code: str
+    output: Optional[str]
+    execution_count: int
 
 class AgentState(TypedDict):
 

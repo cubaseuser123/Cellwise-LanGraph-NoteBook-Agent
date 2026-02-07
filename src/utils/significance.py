@@ -36,7 +36,7 @@ def is_significant_cell(code:str) -> Tuple[bool, Optional[str]]:
     #split into lines for line by line analysis
     lines = [l.strip() for l in stripped.split('\n') if l.strip()]
 
-    if.all(l.startswith('#') for l in lines):
+    if all(l.startswith('#') for l in lines):
         return False, 'comment_only'
 
     #now the import only cells

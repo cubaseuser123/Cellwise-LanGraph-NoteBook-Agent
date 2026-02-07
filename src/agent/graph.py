@@ -1,11 +1,11 @@
 from langgraph.graph import StateGraph, END
 from typing import Literal
 
-from.state import AgentState
-from .nodes import (
+from agent.state import AgentState
+from agent.nodes import (
     check_significance,
     gather_context,
-    generate_explanation_sync.
+    generate_explanation,
     format_markdown,
     update_file,
 )
@@ -27,7 +27,7 @@ def create_documentation_graph() -> StateGraph:
 
     workflow.add_node("check_significance", check_significance)
     workflow.add_node("gather_context", gather_context)
-    workflow.add_node("generate_explanation", generate_explanation_sync)
+    workflow.add_node("generate_explanation", generate_explanation)
     workflow.add_node("format_markdown", format_markdown)
     workflow.add_node("update_file", update_file)
 

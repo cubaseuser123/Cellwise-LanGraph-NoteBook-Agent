@@ -68,10 +68,7 @@ def initatlize_docs_file(filepath:str, notebook_name:str) -> None:
     if os.path.exists(filepath):
         return
     
-    header = f"""# Documentation: {notebook_name}
-    > Auto-generated documentation for Jupyter notebook cells.
-    > Generated on: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
-    """
+    header = f"# Documentation: {notebook_name}\n> Auto-generated documentation for Jupyter notebook cells.\n> Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
 
     try:
         with open(filepath, "w", encoding='utf-8') as f:

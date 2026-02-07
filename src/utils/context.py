@@ -1,7 +1,7 @@
 #Here we gather context of previous cells for our LLM to work with 
 from typing import List
-from ..agent.state import CellInfo
-from ..config import get_settings
+from agent.state import CellInfo
+from config import get_settings
 
 def format_context_for_prompt(cells: List[CellInfo]) -> str:
     """
