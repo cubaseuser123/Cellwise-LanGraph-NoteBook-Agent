@@ -30,29 +30,62 @@ def _is_jupyter_environment() -> bool:
     except ImportError:
         return False
 
-def _get_notebook_path() -> str:
-    #here we get path to the current notebook.
+def _find_notebook_by_code(current_code: str) -> str:
+    """Find the notebook file that contains the given code."""
+    import json
+    cwd = os.getcwd()
+    matches = []
+    
+    for nb_file in Path(cwd).glob("*.ipynb"):
+        try:
+            with open(nb_file, "r", encoding="utf-8") as f:
+                content = json.load(f)
+            
+            for cell in content.get("cells", []):
+                if cell.get("cell_type") == "code":
+                    source = "".join(cell.get("source", []))
+                    if source.strip() == current_code.strip():
+                        matches.append(nb_file)
+                        break
+        except:
+            pass
+    
+    if len(matches) == 1:
+        return str(matches[0])
+    
+    if len(matches) > 1:
+        # Prefer non-Untitled notebooks
+        for m in matches:
+            if "untitled" not in m.stem.lower():
+                return str(m)
+        return str(matches[0])
+    
+    return None
+
+def _get_notebook_path(current_code: str = None) -> str:
+    """Get path to the current notebook, using content matching if available."""
     try:
         from IPython import get_ipython
         ip = get_ipython()
-
         cwd = os.getcwd()
-        notebooks = list(Path(cwd).glob("*.ipynb"))
         
-        # If there's only one notebook, it's definitely that one
+        # Strategy 1: Content matching (most reliable)
+        if current_code:
+            matched = _find_notebook_by_code(current_code)
+            if matched:
+                return matched
+        
+        # Strategy 2: Single notebook in directory
+        notebooks = list(Path(cwd).glob("*.ipynb"))
         if len(notebooks) == 1:
             return str(notebooks[0])
-
-        # If multiple, try to match using session or kernel ID
+        
+        # Strategy 3: Session variable (fallback)
         if hasattr(ip, "user_ns") and "__session__" in ip.user_ns:
             return ip.user_ns["__session__"]
         
-        connection_file = ip.kernel.config.get("IPKernelApp", {}).get("connection_file", "")
-        if connection_file:
-            # Could parse connection file to get kernel ID
-            pass
-
-        kernel_id = getattr(ip.kernel, "ident", "unkown")
+        # Strategy 4: Kernel ID (last resort)
+        kernel_id = getattr(ip.kernel, "ident", "unknown")
         return str(Path(cwd) / f"notebook_{kernel_id}.ipynb")
     except Exception as e:
         return str(Path(os.getcwd()) / "unknown_notebook.ipynb")
@@ -96,7 +129,8 @@ def _setup_documentation_hook():
             return
         
         try:
-            notebook_path = _get_notebook_path()
+            current_code = result.info.raw_cell
+            notebook_path = _get_notebook_path(current_code)
             notebook_name = _get_notebook_name(notebook_path)
 
             cell_info = {

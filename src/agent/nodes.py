@@ -33,7 +33,7 @@ def gather_context(state: AgentState) -> Dict[str, Any]:
     """
     Here we read the current docs file content as context
     """
-    print("[NotebookDocs] Gathering context...")
+    # Silently gather context
     docs_filepath = state["docs_filepath"]
     current_content = read_current_docs(docs_filepath)
     return {"current_docs_content" : current_content}
@@ -105,9 +105,11 @@ def update_file(state : AgentState) -> Dict[str, Any]:
     """
     Now we append the md file with new code, that part happens over here.
     """
-    # print(f"[NotebookDocs] Updating file: {state['docs_filepath']}")
     try:
         append_to_docs(state["docs_filepath"], state["formatted_markdown"])
+        # User-friendly success message
+        from pathlib import Path
+        print(f"[NotebookDocs] ✓ Documentation saved: {Path(state['docs_filepath']).name}")
     except Exception as e:
         print(f"[NotebookDocs] Error writing docs: {e}")
     return {}
