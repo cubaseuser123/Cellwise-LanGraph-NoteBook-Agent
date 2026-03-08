@@ -48,8 +48,8 @@ graph LR
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/notebook-agent.git
-   cd notebook-agent
+   git clone https://github.com/cubaseuser123/Cellwise-LanGraph-NoteBook-Agent.git
+   cd Cellwise-LanGraph-NoteBook-Agent
    ```
 
 2. **Install Dependencies**
