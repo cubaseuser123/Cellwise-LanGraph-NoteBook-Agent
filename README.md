@@ -1,5 +1,7 @@
 # 🤖 Jupyter Notebook Auto-Documentation Agent
 
+[![Awesome](https://awesome.re/badge.svg)](https://github.com/von-development/awesome-LangGraph)
+
 > **"Code that documents itself."** 
 > An intelligent background agent that watches your Jupyter Notebook executions and automatically generates explanatory documentation using LangGraph. Works with any OpenAI-compatible API — OpenAI, Groq, Ollama, Vercel AI Gateway, and more.
 
